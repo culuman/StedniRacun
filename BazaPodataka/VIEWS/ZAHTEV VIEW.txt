@@ -1,0 +1,12 @@
+CREATE VIEW ZahteviZaOtvaranje AS 
+SELECT z.IDZahteva, z.JMBGKorisnika, k.Ime, k.Prezime, z.Status 
+FROM dbo.ZAHTEV z 
+JOIN dbo.KORISNIK k ON z.JMBGKorisnika = k.JMBG
+WHERE z.Status = 'Na čekanju';
+
+CREATE VIEW ZahteviPoKorisniku AS
+SELECT z.IDZahteva, z.JMBGKorisnika, z.Status, k.Ime, k.Prezime, k.Email
+FROM ZAHTEV z
+JOIN KORISNIK k ON z.JMBGKorisnika = k.JMBG
+WHERE z.Status = 'Na čekanju';
+GO

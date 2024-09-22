@@ -1,0 +1,24 @@
+﻿@{
+    ViewData["Title"] = "Početna";
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+<h1>Dobrodošli</h1>
+
+
+<div class="btn-group-vertical" role="group">
+<a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="AdminPregledKorisnika"><button>PREGLED KORISNIKA</button></a>
+    <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="AdminPregledZahteva"><button>ZAHTEVI</button></a>
+    <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="AdminPregledUplata"><button>UPLATE</button></a>
+    <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="AdminStampaRacuna"><button>ŠTAMPAJ RAČUNE</button></a>
+</div>

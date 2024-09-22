@@ -1,0 +1,5 @@
+CREATE VIEW KorisniciSaRacunima AS 
+SELECT k.JMBG, k.Ime, k.Prezime, k.Email, r.BrojRacuna, r.Stanje 
+FROM dbo.KORISNIK k 
+JOIN dbo.RACUN r ON k.JMBG = r.JMBGKorisnika
+WHERE k.TipKorisnika = 'fizičko lice';

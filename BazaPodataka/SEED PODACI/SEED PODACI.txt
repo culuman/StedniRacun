@@ -1,0 +1,1 @@
+INSERT INTO KORISNIK (JMBG, Ime, Prezime, Email, Lozinka, Godine, TipKorisnika) VALUES ('1231231231231', 'Nikola', 'Culuman', 'admin@gmail.com', 'test123', 23, 'admin');

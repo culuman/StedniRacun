@@ -1,0 +1,19 @@
+CREATE VIEW SveUplate AS 
+SELECT u.IDUplate, u.JMBGKorisnika, k.Ime, k.Prezime, r.BrojRacuna, u.Iznos, u.Status, u.Datum 
+FROM dbo.UPLATA u 
+JOIN dbo.KORISNIK k ON u.JMBGKorisnika = k.JMBG
+JOIN dbo.RACUN r ON u.IDRacuna = r.IDRacuna;
+
+
+CREATE VIEW UplateNaCekanju AS 
+SELECT u.IDUplate, u.JMBGKorisnika, k.Ime, k.Prezime, r.BrojRacuna, u.Iznos, u.Status, u.Datum 
+FROM dbo.UPLATA u 
+JOIN dbo.KORISNIK k ON u.JMBGKorisnika = k.JMBG
+JOIN dbo.RACUN r ON u.IDRacuna = r.IDRacuna
+WHERE u.Status = 'Na čekanju';
+
+
+CREATE VIEW UplatePoKorisnicima AS 
+SELECT u.JMBGKorisnika, k.Ime, k.Prezime, SUM(CAST(u.Iznos AS decimal(18, 2))) AS UkupnoUplaceno FROM dbo.UPLATA u 
+JOIN dbo.KORISNIK k ON u.JMBGKorisnika = k.JMBG 
+GROUP BY u.JMBGKorisnika, k.Ime, k.Prezime;

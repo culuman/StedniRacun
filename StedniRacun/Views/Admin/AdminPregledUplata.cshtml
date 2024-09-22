@@ -1,0 +1,79 @@
+﻿@using System.Data
+
+@{
+    ViewData["Title"] = "Uplate";
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<h1>Spisak neodobrenih uplata:</h1>
+
+@if (Model != null && Model.Tables.Count > 0 && Model.Tables[0].Rows.Count > 0)
+
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Uplata</th>
+                <th>JMBG</th>
+                <th>Ime</th>
+                <th>Prezime</th>
+                <th>Iznos</th>
+                <th>Broj racuna</th>
+                <th>Status</th>
+                <th>Datum</th>
+                <th>Odobri</th>
+                <th>Odbij</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (DataRow row in Model.Tables[0].Rows)
+
+            {
+
+
+                <tr>
+                    <td>@row["IDUplate"]</td>
+                    <td>@row["JMBGKorisnika"]</td>
+                    <td>@row["Ime"]</td>
+                    <td>@row["Prezime"]</td>
+                    <td>@row["Iznos"]</td>
+                    <td>@row["BrojRacuna"]</td>
+                    <td>@row["Status"]</td>
+                    <td>@((row["Datum"] as DateTime?)?.ToString("dd/MM/yyyy"))</td>
+                    <td>
+                        <form method="post" action="@Url.Action("UpravljajUplatama", "Admin")">
+                            <input type="hidden" name="IDUplate" value="@row["IDUplate"]" />
+                            <input type="hidden" name="action" value="odobri" />
+                            <button type="submit" class="btn btn-sm btn-success">Odobri</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form method="post" action="@Url.Action("UpravljajUplatama", "Admin")">
+                            <input type="hidden" name="IDUplate" value="@row["IDUplate"]" />
+                            <input type="hidden" name="action" value="odbij" />
+                            <button type="submit" class="btn btn-sm btn-danger">Odbij</button>
+                        </form>
+                    </td>
+                </tr>
+
+            }
+        </tbody>
+    </table>
+}
+
+else
+
+{
+    <p>Nema uplata.</p>
+}

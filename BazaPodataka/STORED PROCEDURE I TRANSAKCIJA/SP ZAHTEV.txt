@@ -1,0 +1,31 @@
+CREATE PROCEDURE OtvoriZahtev
+    @JMBGKorisnika nvarchar(13)
+AS
+BEGIN
+    INSERT INTO ZAHTEV (JMBGKorisnika, Status)
+    VALUES (@JMBGKorisnika, 'Na čekanju');
+END
+GO
+
+CREATE PROCEDURE PrikaziZahteveZaOtvaranje
+AS
+BEGIN
+    SELECT * FROM ZahteviZaOtvaranje;
+END
+GO
+
+CREATE PROCEDURE PrikaziZahtevePoKorisniku
+    @JMBGKorisnika nvarchar(13)
+AS
+BEGIN
+    SELECT * FROM ZahteviPoKorisniku
+    WHERE JMBGKorisnika = @JMBGKorisnika;
+END
+GO
+
+CREATE PROCEDURE OdbijZahtev (
+@IDZahteva int
+)
+AS
+UPDATE ZAHTEV SET Status = 'Odbijen' WHERE IDZahteva = @IDZahteva
+GO

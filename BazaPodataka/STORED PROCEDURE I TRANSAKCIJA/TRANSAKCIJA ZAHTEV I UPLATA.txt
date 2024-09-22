@@ -1,0 +1,78 @@
+CREATE PROCEDURE OdobriZahtevIKreirajRacun
+    @IDZahteva int,
+    @BrojRacuna nvarchar(20)
+AS
+BEGIN
+    BEGIN TRANSACTION;
+
+    BEGIN TRY
+        DECLARE @JMBGKorisnika nvarchar(13);
+
+        SELECT @JMBGKorisnika = JMBGKorisnika 
+        FROM ZAHTEV 
+        WHERE IDZahteva = @IDZahteva AND Status = 'Na čekanju';
+
+        IF @JMBGKorisnika IS NULL
+        BEGIN
+            RAISERROR('Zahtev ne postoji ili nije u statusu "Na čekanju".', 16, 1);
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
+
+        UPDATE ZAHTEV
+        SET Status = 'Odobren'
+        WHERE IDZahteva = @IDZahteva;
+
+        INSERT INTO RACUN (JMBGKorisnika, BrojRacuna, Stanje)
+        VALUES (@JMBGKorisnika, @BrojRacuna, 0.00);
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END
+GO
+
+CREATE PROCEDURE OdobriUplatuIDodajNaRacun
+    @IDUplate int
+AS
+BEGIN
+    BEGIN TRANSACTION;
+
+    BEGIN TRY
+        DECLARE @IDRacuna int;
+        DECLARE @Iznos decimal(18, 2);
+        DECLARE @Status nvarchar(50);
+
+        -- Prvo, dohvatamo informacije o uplati
+        SELECT @IDRacuna = IDRacuna, @Iznos = Iznos, @Status = Status 
+        FROM UPLATA 
+        WHERE IDUplate = @IDUplate;
+
+        IF @Status != 'Na čekanju'
+        BEGIN
+            RAISERROR('Uplata nije u statusu "Na čekanju".', 16, 1);
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
+
+        -- Ažuriramo status uplate na 'Odobrena'
+        UPDATE UPLATA
+        SET Status = 'Odobrena'
+        WHERE IDUplate = @IDUplate;
+
+        -- Dodajemo iznos na stanje računa
+        UPDATE RACUN
+        SET Stanje = Stanje + @Iznos
+        WHERE IDRacuna = @IDRacuna;
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END
+GO

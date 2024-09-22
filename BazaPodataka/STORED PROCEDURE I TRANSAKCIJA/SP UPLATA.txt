@@ -1,0 +1,41 @@
+CREATE PROCEDURE KreirajUplatu
+    @JMBGKorisnika nvarchar(13),
+    @IDRacuna int,
+    @Iznos decimal(18, 2),
+    @Datum date
+AS
+BEGIN
+    INSERT INTO UPLATA (JMBGKorisnika, IDRacuna, Iznos, Status, Datum)
+    VALUES (@JMBGKorisnika, @IDRacuna, @Iznos, 'Na čekanju', @Datum);
+END
+GO
+
+CREATE PROCEDURE PrikaziUplateNaCekanju
+AS
+BEGIN
+    SELECT * FROM UplateNaCekanju;
+END
+GO
+
+CREATE PROCEDURE PrikaziUplateZaKorisnika
+    @JMBGKorisnika nvarchar(13)
+AS
+BEGIN
+    SELECT * FROM SveUplate
+    WHERE JMBGKorisnika = @JMBGKorisnika;
+END
+GO
+
+CREATE PROCEDURE PrikaziUplatePoKorisnicima
+AS
+BEGIN
+    SELECT * FROM UplatePoKorisnicima;
+END
+GO
+
+CREATE PROCEDURE OdbijUplatu (
+@IDUplate int
+)
+AS
+UPDATE UPLATA SET Status = 'Odbijen' WHERE IDUplate = @IDUplate
+GO 

@@ -1,0 +1,10 @@
+CREATE VIEW StanjeRacunaKorisnika AS 
+SELECT k.JMBG, k.Ime, k.Prezime, r.IDRacuna, r.BrojRacuna, r.Stanje 
+FROM dbo.KORISNIK k 
+JOIN dbo.RACUN r ON k.JMBG = r.JMBGKorisnika;
+
+CREATE VIEW RacuniSaDetaljima AS
+SELECT r.IDRacuna, k.Ime, k.Prezime, r.Stanje
+FROM RACUN r
+JOIN KORISNIK k ON r.JMBGKorisnika = k.JMBG;
+GO

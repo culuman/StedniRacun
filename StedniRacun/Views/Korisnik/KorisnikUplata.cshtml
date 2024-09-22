@@ -1,0 +1,65 @@
+﻿@using System.Data;
+@model System.Data.DataSet
+
+
+@{
+    ViewData["Title"] = "Uplate";
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<form asp-action="DodajUplatu" asp-controller="Korisnik" method="post">
+    <div class="form-group">
+        <label for="idRacuna">Izaberite račun:</label>
+        <select id="idRacuna" name="idRacuna" class="form-control" required>
+            <option value="">Izaberite...</option>
+            @foreach (var brojRacuna in ViewBag.BrojeviRacuna)
+            {
+                <option value="@brojRacuna.IDRacuna">@brojRacuna.BrojRacuna</option>
+            }
+        </select>
+    </div>
+    <label for="iznos">Unesite iznos:</label>
+    <input id="iznos" name="iznos" type="text" class="form-control" />
+    <button type="submit" class="btn btn-sm btn-success">Potvrdi</button>
+</form>
+
+
+<h1>Spisak svih uplata:</h1>
+
+@if (Model != null && Model.Tables.Count > 0 && Model.Tables[0].Rows.Count > 0)
+{
+    <table class="table table-striped">
+        <tr>
+            <th>ID Uplate</th>
+            <th>Iznos</th>
+            <th>Broj računa</th>
+        </tr>
+
+        @foreach (DataRow row in Model.Tables[0].Rows)
+        {
+            <tr>
+                <td>@row["IDUplate"]</td>
+                <td>@row["Iznos"]</td>
+                <td>@row["BrojRacuna"]</td>
+
+            </tr>
+        }
+    </table>
+}
+
+else
+{
+    <p>Nema uplata.</p>
+}

@@ -1,0 +1,83 @@
+CREATE PROCEDURE KreirajKorisnika
+    @JMBG nvarchar(13),
+    @Ime nvarchar(20),
+    @Prezime nvarchar(40),
+    @Email nvarchar(40),
+    @Lozinka nvarchar(20),
+    @Godine int
+AS
+BEGIN
+    INSERT INTO KORISNIK (JMBG, Ime, Prezime, Email, Lozinka, Godine, TipKorisnika)
+    VALUES (@JMBG, @Ime, @Prezime, @Email, @Lozinka, @Godine, 'fizičko lice');
+END
+GO
+
+CREATE PROCEDURE IzmeniKorisnika
+    @JMBG nvarchar(13),
+    @Ime nvarchar(20),
+    @Prezime nvarchar(40),
+    @Email nvarchar(40),
+    @Lozinka nvarchar(20),
+    @Godine int
+AS
+BEGIN
+    UPDATE KORISNIK
+    SET Ime = @Ime,
+        Prezime = @Prezime,
+        Email = @Email,
+        Lozinka = @Lozinka,
+        Godine = @Godine
+    WHERE JMBG = @JMBG;
+END
+GO
+
+CREATE PROCEDURE ObrisiKorisnika
+    @JMBG nvarchar(13)
+AS
+BEGIN
+    DELETE FROM KORISNIK WHERE JMBG = @JMBG;
+END
+GO
+
+CREATE PROCEDURE PrikaziSveKorisnike
+AS
+BEGIN
+    SELECT * 
+    FROM KORISNIK
+END
+GO
+
+CREATE PROCEDURE PrikaziKorisnikeSaRacunima
+AS
+BEGIN
+    SELECT * FROM KorisniciSaRacunima;
+END
+GO
+
+CREATE PROCEDURE PronadjiKorisnikaPoJMBG
+    @JMBG nvarchar(13)
+AS
+BEGIN
+    SELECT * 
+    FROM KORISNIK
+    WHERE JMBG = @JMBG;
+END
+GO
+
+CREATE PROCEDURE PronadjiKorisnikaPoEmailu
+    @Email nvarchar(40)
+AS
+BEGIN
+    SELECT * 
+    FROM KORISNIK
+    WHERE Email = @Email;
+END
+GO
+
+CREATE PROCEDURE PronadjiKorisnikaPoPrezimenu
+    @Prezime nvarchar(40)
+AS
+BEGIN
+    SELECT * FROM KORISNIK WHERE Prezime LIKE '%' + @Prezime + '%'
+END
+GO

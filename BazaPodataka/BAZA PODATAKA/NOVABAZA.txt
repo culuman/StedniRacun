@@ -1,0 +1,74 @@
+USE [master]
+GO
+
+CREATE DATABASE [StedniRacun] 
+GO
+
+USE [StedniRacun]
+GO
+
+CREATE TABLE [dbo].[KORISNIK](
+[JMBG] [nvarchar](13) NOT NULL PRIMARY KEY,
+[Ime] [nvarchar](20) NOT NULL,
+[Prezime] [nvarchar](40) NOT NULL,
+[Email] [nvarchar](40) NOT NULL,
+[Lozinka] [nvarchar](20) NOT NULL,
+[Godine] [int] NOT NULL,
+[TipKorisnika] [nvarchar](20) NOT NULL
+)
+GO
+
+CREATE TABLE [dbo].[ZAHTEV](
+[IDZahteva] [int] IDENTITY(1,1) PRIMARY KEY,
+[JMBGKorisnika] [nvarchar](13) NOT NULL,
+[Status] [nvarchar](20) NOT NULL
+)
+GO
+
+CREATE TABLE [dbo].[UPLATA](
+[IDUplate] [int] IDENTITY(1,1) PRIMARY KEY,
+[JMBGKorisnika] [nvarchar](13) NOT NULL,
+[IDRacuna] [int] NOT NULL,
+[Iznos] [decimal](18, 2) NOT NULL,
+[Status] [nvarchar] NOT NULL,
+[Datum] [date] NOT NULL
+)
+GO
+
+CREATE TABLE [dbo].[RACUN](
+[IDRacuna] [int] IDENTITY(1,1) PRIMARY KEY,
+[JMBGKorisnika] [nvarchar](13) NOT NULL,
+[Stanje] [decimal](18, 2) NOT NULL
+)
+GO
+
+ALTER TABLE [dbo].[ZAHTEV] ADD CONSTRAINT
+[FK_ZAHTEV_KORISNIK] FOREIGN KEY([JMBGKorisnika])
+REFERENCES [dbo].[KORISNIK] ([JMBG])
+ON UPDATE CASCADE
+ON DELETE CASCADE
+GO
+
+ALTER TABLE [dbo].[UPLATA] ADD CONSTRAINT
+[FK_UPLATA_KORISNIK] FOREIGN KEY([JMBGKorisnika])
+REFERENCES [dbo].[KORISNIK] ([JMBG])
+ON UPDATE NO ACTION
+ON DELETE NO ACTION
+GO
+
+ALTER TABLE [dbo].[UPLATA] ADD CONSTRAINT
+[FK_UPLATA_RACUN] FOREIGN KEY([IDRacuna])
+REFERENCES [dbo].[RACUN] ([IDRacuna])
+ON UPDATE CASCADE
+ON DELETE CASCADE
+GO
+
+ALTER TABLE [dbo].[RACUN] ADD CONSTRAINT
+[FK_RACUN_KORISNIK] FOREIGN KEY([JMBGKorisnika])
+REFERENCES [dbo].[KORISNIK] ([JMBG])
+ON UPDATE NO ACTION
+ON DELETE CASCADE
+GO
+
+ALTER TABLE RACUN
+ADD BrojRacuna NVARCHAR(20);

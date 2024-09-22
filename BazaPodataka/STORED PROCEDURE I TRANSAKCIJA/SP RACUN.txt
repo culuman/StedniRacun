@@ -1,0 +1,23 @@
+CREATE PROCEDURE ObrisiRacun
+    @IDRacuna int
+AS
+BEGIN
+    DELETE FROM RACUN WHERE IDRacuna = @IDRacuna;
+END
+GO
+
+CREATE PROCEDURE PrikaziStanjeRacunaKorisnika
+    @JMBGKorisnika nvarchar(13)
+AS
+BEGIN
+    SELECT * FROM StanjeRacunaKorisnika
+    WHERE JMBG = @JMBGKorisnika;
+END
+GO
+
+CREATE PROCEDURE PrikaziSveRacune
+AS
+BEGIN
+    SELECT * FROM RacuniSaDetaljima;
+END
+GO
